@@ -1,4 +1,4 @@
-# http://codeforces.com/contest/869/problem/E
+//# http://codeforces.com/contest/869/problem/E
 #include <list>
 
 #include <set>
