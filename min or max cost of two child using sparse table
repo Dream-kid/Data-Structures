@@ -1,0 +1,145 @@
+//min or max cost of two child using sparse table
+#include <bits/stdc++.h>
+using namespace std;
+#define ll long long
+#define inf 1000000000000
+vector<pair<ll,ll> >v[300010];
+ll parent[300010];
+ll par[300010];
+ll visited[300010];
+ll depth[300010];
+ll sparge_table[300010][22];
+ll dis[300010][22];
+vector<pair<ll,pair<ll,ll> > >v1;
+void bfs(ll u)
+{
+    queue<ll>q;
+    q.push(u);
+    visited[u]=-1;
+    par[u]=-1;
+    while(!q.empty())
+    {
+        ll u=q.front();
+        q.pop();
+        for(ll i=0; i<v[u].size(); i++)
+        {
+            ll s=v[u][i].first;
+            ll cost=v[u][i].second;
+            if(visited[s])
+                continue;
+            visited[s]=1;
+            q.push(s);
+            depth[s]=depth[u]+1;
+            parent[s]=u;
+            dis[s][0]=cost;
+        }
+    }
+}
+void lca_init(ll a)
+{
+    memset(sparge_table,-1,sizeof sparge_table);
+    for(ll i=1; i<=a; i++)
+    {
+        sparge_table[i][0]=parent[i];
+    }
+    for(ll j=1; (1LL<<j)<=a; j++)
+    {
+        for(ll i=1; i<=a; i++)
+        {
+            if(sparge_table[i][j-1]!=-1)
+            {
+                sparge_table[i][j]=sparge_table[sparge_table[i][j-1]][j-1];
+                dis[i][j]=min(dis[i][j-1],dis[sparge_table[i][j-1]][j-1]);
+
+            }
+        }
+    }
+}
+ll lca(ll s,ll t)
+{
+    if(depth[s]<depth[t])
+        swap(s,t);
+    ll log=20;
+    ll maxi=inf;
+    for(ll i=log; i>=0; i--)
+    {
+        if(depth[s]- (1LL<<i) >= depth[t])
+        {
+            maxi=min(maxi,dis[s][i]);
+            s=sparge_table[s][i];
+        }
+    }
+
+    if(s==t)
+        return maxi;
+
+    for(ll i=log; i>=0; i--)
+    {
+        if(sparge_table[s][i]!=sparge_table[t][i]&&sparge_table[s][i]!=-1)
+        {
+            maxi=min(maxi,dis[s][i]);
+            maxi=min(maxi,dis[t][i]);
+            s=sparge_table[s][i];
+            t=sparge_table[t][i];
+
+
+        }
+    }
+    maxi=min(maxi,dis[s][0]);
+    maxi=min(maxi,dis[t][0]);
+    return maxi;
+}
+ll find(ll u)
+{
+    if(u==par[u])
+        return u;
+    return par[u]=find(par[u]);
+}
+ll mst()
+{
+    ll temp=0;
+    for(ll i=0; i<v1.size(); i++)
+    {
+        ll temp1=v1[i].second.first;
+        ll temp2=v1[i].second.second;
+        temp1=find(temp1);
+        temp2=find(temp2);
+        if(temp1==temp2)
+            continue;
+        par[temp1]=temp2;
+
+        ll cost=v1[i].first;
+        v[v1[i].second.first].push_back(make_pair(v1[i].second.second,cost));
+        v[v1[i].second.second].push_back(make_pair(v1[i].second.first,cost));
+        temp+=cost;
+    }
+    return temp;
+}
+map<ll,map<ll,ll> >m;
+int main()
+{
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+    cout.tie(0);
+    ll total,cnt,cnt1;
+    cin>>total>>cnt>>cnt1;
+    for(ll i=1; i<=cnt; i++)
+    {
+        ll val,l,r;
+        cin>>l>>r>>val;
+        v1.push_back(make_pair(val,make_pair(l,r)));
+        par[l]=l;
+        par[r]=r;
+    }
+    sort(v1.rbegin(),v1.rend());
+    ll cost= mst();
+    bfs(1);
+    lca_init(total);
+    for(ll i=1; i<=cnt1; i++)
+    {
+        ll l,r;
+        cin>>l>>r;
+        ll sum=lca(l,r);
+        cout<<sum<<endl;
+    }
+}
