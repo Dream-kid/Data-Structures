@@ -134,6 +134,7 @@ void lca_init(ll a)
 }
 ll lca(ll s,ll t,ll a)
 {
+    if(depth[t]>depth[s]) swap(s,t);
     ll log=1;
     while(1)
     {
@@ -182,7 +183,7 @@ int main()
         {
             ll p,q,a;
             ssll(p,q);
-            if(depth[q]>depth[p]) swap(p,q);
+           // if(depth[q]>depth[p]) swap(p,q);
             ll s=lca(p,q,a);
             ll l=distance1[p]+distance1[q]-2*distance1[s];
             if(l1) pf(" ");
