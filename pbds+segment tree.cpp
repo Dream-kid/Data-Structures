@@ -37,11 +37,10 @@ void update(ll node,ll l,ll r,ll p,ll q,ll val)
 {
     if(r<p||q<l)
         return;
-    tree1[node].erase(tree1[node].find(arr[p]));
+    tree1[node].erase(tree1[node].upper_bound(arr[p]));
     tree1[node].insert(val);
     if(l>=p&&r<=q)
     {
-
         arr[l]=val;
         return;
     }
