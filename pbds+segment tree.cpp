@@ -1,4 +1,4 @@
-//https://www.codechef.com/problems/GIVEAWAY
+//https://www.codechef.com/problems/GIVEAWAY (give tle use sqrt decomposition)
 #include<bits/stdc++.h>
 #include <ext/pb_ds/assoc_container.hpp>
 #include <ext/pb_ds/tree_policy.hpp>
@@ -8,7 +8,7 @@ typedef int ll;
 #define inf 1000000010000
 #define mod1 1000000007
 
-typedef tree<int, null_type, less<int>, rb_tree_tag,
+typedef tree<int, null_type, less_equal<int>, rb_tree_tag,
         tree_order_statistics_node_update>
         new_data_set;
 
