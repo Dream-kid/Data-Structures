@@ -12,7 +12,7 @@ typedef tree<int, null_type, less_equal<int>, rb_tree_tag,
         tree_order_statistics_node_update>
         new_data_set;
 
-vector<new_data_set>tree1(2000000);
+new_data_set tree1[2000000];
 ll arr[100010*5];
 void merge(ll node)
 {
